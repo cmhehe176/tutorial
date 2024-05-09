@@ -11,7 +11,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 			inject: [ConfigService],
 
 			// cách để kết nối động với typeorm
-
+			// 
 			useFactory: (configService: ConfigService) => ({
 				type: 'mysql',
 				host: configService.get('MYSQL_HOST'),
