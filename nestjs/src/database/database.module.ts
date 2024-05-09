@@ -11,14 +11,20 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 			inject: [ConfigService],
 
 			// cách để kết nối động với typeorm
-			// 
+			// ở đây là nơi kết nối đến db , còn cái datasource kia chỉ để phục vụ cho cái việc như là
+			//migration: tạo bảng từ entity
+			//seed: tạo fake data
+
+			// còn cái config kia chỉ là giống một cái middlerware để có thể làm gì đó ... tùy vào dự án
+			// vi dụ: MYSQL_CREDENTIALS là phụ thuộc vào dự án này này 
+
 			useFactory: (configService: ConfigService) => ({
 				type: 'mysql',
-				host: configService.get('MYSQL_HOST'),
-				port: configService.get('MYSQL_PORT'),
-				username: configService.get('dMYSQL_USERNAME'),
-				password: configService.get('MYSQL_PASSWORD'),
-				database: configService.get('MYSQL_DATABASE'),
+				host: configService.get('database.host'),
+				port: configService.get('database.port'),
+				username: configService.get('database.username'),
+				password: configService.get('database.password'),
+				database: configService.get('database.database'),
 				entities: [],
 				synchronize: false,
 				autoLoadEntities: true,
