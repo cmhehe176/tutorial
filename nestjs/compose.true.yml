@@ -3,10 +3,10 @@ networks:
 
 volumes:
   super-vol: {}
-
+  
 services:
   super:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
       target: development
@@ -16,7 +16,7 @@ services:
         condition: service_healthy
     networks:
       - super-net
-    ports:
+    ports: 
       - 3000:${PORT}/tcp
     volumes:
       - .:/super
@@ -24,22 +24,22 @@ services:
   database:
     image: mysql:8.0
     healthcheck:
-      test: 
+      test:
         [
           'CMD-SHELL',
           'MYSQL_PWD=$$MYSQL_ROOT_PASSWORD mysqladmin ping -u root -h localhost -s',
         ]
-      interval: 10s
-      timeout: 3s
-      retries: 3
       start_period: 20s
+      retries: 3
+      timeout: 3s
+      interval: 10s
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_USERNAME=${MYSQL_USERNAME}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
-    restart: unless-stoped
+    restart: unless-stopped
     ports:
       - 3306:3306
     networks:
@@ -63,3 +63,5 @@ services:
       - super-net
     ports:
       - 8080:8080/tcp
+
+  

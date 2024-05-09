@@ -13,12 +13,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 			// cách để kết nối động với typeorm
 
 			useFactory: (configService: ConfigService) => ({
-				type: 'postgres',
-				host: configService.get('database.'),
-				port: configService.get('database.'),
-				username: configService.get('database.'),
-				password: configService.get('database.'),
-				database: configService.get('database.'),
+				type: 'mysql',
+				host: configService.get('MYSQL_HOST'),
+				port: configService.get('MYSQL_PORT'),
+				username: configService.get('dMYSQL_USERNAME'),
+				password: configService.get('MYSQL_PASSWORD'),
+				database: configService.get('MYSQL_DATABASE'),
 				entities: [],
 				synchronize: false,
 				autoLoadEntities: true,
