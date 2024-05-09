@@ -39,7 +39,7 @@ services:
       - MYSQL_USERNAME=${MYSQL_USERNAME}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
-    restart: unless-stoped
+    restart: unless-stopped
     ports:
       - 3306:3306
     networks:
