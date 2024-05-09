@@ -1,1 +1,1 @@
-export * from '../user/user.entity'
+export * from '../module/user/user.entity'
