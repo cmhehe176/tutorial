@@ -25,7 +25,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     restart: unless-stopped
     ports:
-      - 3306:3306
+      - 4000:${MYSQL_PORT}
     networks:
       - super-net
     volumes:
@@ -46,4 +46,4 @@ services:
     networks:
       - super-net
     ports:
-      - 8080:8080/tcp
+      - 8081:8080/tcp
