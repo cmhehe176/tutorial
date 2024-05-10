@@ -54,3 +54,10 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+#docker
+compose.true.yml
+compose.true.yaml
+
+compsoe.override.yml
+compsoe.override.yaml
