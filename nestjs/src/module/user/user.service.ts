@@ -12,9 +12,17 @@ export class UserService {
 		private dataSource: DataSource
 	) { }
 	
+	// insert không trả về giá trị
+
 	async create(body: CreateUserDto) {
-		const user = await this.userEntity.insert(body)
+		// const user = {...body}  dùng như này thì nó sẽ không lấy được trường id
+		const user = body 
+		await this.userEntity.insert(body)
 		return user
+	}
+
+	get = async (id: number) => {
+		return this.userEntity.findOneBy({id})
 	}
 
 }
