@@ -5,22 +5,6 @@ volumes:
   super-vol: {}
   
 services:
-  super:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: development
-    command: ['pnpm', 'run', 'dev']
-    depends_on:
-      database:
-        condition: service_healthy
-    networks:
-      - super-net
-    ports: 
-      - 3000:${PORT}/tcp
-    volumes:
-      - .:/super
-
   database:
     image: mysql:8.0
     healthcheck:
@@ -41,7 +25,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     restart: unless-stopped
     ports:
-      - 3306:3306
+      - 3306:${MYSQL_PORT}
     networks:
       - super-net
     volumes:
