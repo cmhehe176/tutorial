@@ -1,0 +1,142 @@
+//docker-compose.yml
+
+networks:
+  super-net: {}
+
+volumes:
+  super-vol: {}
+
+services:
+  super:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    command: ['pnpm', 'run', 'dev']
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - super-net
+    ports:
+      - 3000:${PORT}/tcp
+    volumes:
+      - .:/super
+
+  database:
+    image: mysql:8.0
+    healthcheck:
+      test: 
+        [
+          'CMD-SHELL',
+          'MYSQL_PWD=$$MYSQL_ROOT_PASSWORD mysqladmin ping -u root -h localhost -s',
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 20s
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_USERNAME=${MYSQL_USERNAME}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    networks:
+      - super-net
+    volumes:
+      - super-vol:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    healthcheck:
+      interval: 5s
+      retries: 5
+      start_period: 20s
+      test: ['CMD', 'wget', '--no-verbose', '--spider', 'http://localhost:8080']
+      timeout: 5s
+    environment:
+      - ADMINER_DEFAULT_SERVER=database
+      - ADMINER_PLUGINS=dump-json dump-zip edit-foreign json-column tables-filter tinymce
+    restart: always
+    networks:
+      - super-net
+    ports:
+      - 8080:8080/tcp
+
+----------------------------------------------------------
+
+// Dockerfile
+
+# syntax=docker/dockerfile:1
+
+# ========================
+# Base
+# ========================
+FROM node:20-alpine AS base
+
+WORKDIR /app
+
+# ========================
+# Development
+# ========================
+FROM base AS development
+
+RUN set -eux; \
+	\
+	apk add --update --no-cache \
+	git \
+	build-base \
+	; \
+	corepack enable; \
+	corepack prepare pnpm@latest-8 --activate; \
+	pnpm config set store-dir /tmp/pnpm-store
+
+COPY --chown=node:node package.json pnpm-lock.yaml ./
+
+RUN --mount=type=cache,id=pnpm-cache,target=/tmp/pnpm-store \
+	pnpm install --frozen-lockfile
+
+# ========================
+# Build
+# ========================
+FROM development AS build
+
+ENV NODE_ENV=production
+
+COPY --chown=node:node . ./
+RUN set -eux; \
+	\
+	pnpm run build
+
+RUN --mount=type=cache,id=pnpm-cache,target=/tmp/pnpm-store \
+	pnpm install --frozen-lockfile --production
+
+# ========================
+# Production
+# ========================
+FROM base AS production
+
+ENV NODE_ENV=production
+
+COPY --chown=node:node --from=build /app/node_modules ./node_modules
+COPY --chown=node:node --from=build /app/dist ./dist
+
+CMD ["node", "dist/src/main"]
+
+# ========================
+# Production build with CI
+# ========================
+FROM base AS prod-ci
+
+ENV NODE_ENV=production
+
+COPY --chown=node:node ./node_modules ./node_modules
+COPY --chown=node:node ./dist ./dist
+
+CMD ["node", "dist/src/main"]
+
+------------------------------------------------------
+
