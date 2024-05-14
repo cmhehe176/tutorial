@@ -8,8 +8,8 @@ export default new DataSource({
   username: process.env.MYSQL_USERNAME,
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
-  entities: ['src/entities/index.ts','src/module/*/*.entity.ts'],
-  migrations: ['data_source/migrations/*.ts'],
+  entities: ['src/database/entities/*.entity.ts',],
+  migrations: ['src/database/migrations/*.ts'],
 });
 
 // ở đây , phần entities là nó sẽ lây tất cả các file entities rồi nhét vào migrations để generate , khi generate xong nó sẽ tạo ra các file ở folder migrations ở trong data_source

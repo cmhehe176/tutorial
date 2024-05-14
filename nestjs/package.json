@@ -18,12 +18,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migration:run": "typeorm-ts-node-commonjs migration:run -d ./data_source/data-source.ts",
-    "migration:revert": "typeorm-ts-node-commonjs -d ./data_source/data-source.ts migration:revert",
-    "migration:create": "run(){ typeorm-ts-node-commonjs migration:create ./data_source/migrations/$1; }; run",
-    "migration:generate": "run(){ typeorm-ts-node-commonjs -d ./data_source/data-source.ts migration:generate ./data_source/migrations/$1; }; run",
-    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n ./data_source/seeder-config.ts",
-    "seed:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed -n ./data_source/seeder-config.ts"
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d src/database/data-source.ts",
+    "migration:revert": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:revert",
+    "migration:create": "run(){ typeorm-ts-node-commonjs migration:create src/database/migrations/$1; }; run",
+    "migration:generate": "run(){ typeorm-ts-node-commonjs -d src/database/data-source.ts migration:generate src/database/migrations/$1; }; run",
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n src/database/seeder-config.ts",
+    "seed:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed -n src/database/seeder-config.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
