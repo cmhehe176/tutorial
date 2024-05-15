@@ -1,8 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Login } from './auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AdminEntity } from 'src/database/entities/admin.entity';
 import { Repository } from 'typeorm';
+import { EMAIL_NOT_FOUND, USER_NOT_FOUND } from 'src/common/error';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +17,12 @@ export class AuthService {
     private admin_db: Repository<AdminEntity>,
   ) {}
   login = async (data: Login) => {
-    const { email } = data;
-    const d = await this.admin_db.findOneBy({ email });
+    const email = await this.admin_db.findOneBy({ email: data.email });
+
+    if (!email)
+      throw new HttpException(
+        { message: USER_NOT_FOUND },
+        HttpStatus.UNAUTHORIZED,
+      );
   };
 }
