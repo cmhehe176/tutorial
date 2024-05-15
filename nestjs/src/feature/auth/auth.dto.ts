@@ -11,9 +11,16 @@ export class Login {
 }
 
 export class Register {
+
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
+  @IsString()
+  @IsNotEmpty()
   email: string;
 
+  @IsString()
+  @IsNotEmpty()
   password: string;
 }
