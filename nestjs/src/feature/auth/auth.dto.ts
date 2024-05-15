@@ -9,3 +9,11 @@ export class Login {
   @IsNotEmpty()
   password: string;
 }
+
+export class Register {
+  name: string;
+
+  email: string;
+
+  password: string;
+}
