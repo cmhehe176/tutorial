@@ -11,7 +11,6 @@ export class Login {
 }
 
 export class Register {
-
   @IsString()
   @IsNotEmpty()
   name: string;

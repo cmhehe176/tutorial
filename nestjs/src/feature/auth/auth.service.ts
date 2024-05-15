@@ -28,7 +28,8 @@ export class AuthService {
     //or
     //const hashPassword = bcrypt.hash(data.password,10) => fast
 
-    await this.admin_db.insert({ ...data, password: hashPassword });
+    data.password = hashPassword;
+    await this.admin_db.insert(data);
 
     delete data.password;
     return data;
