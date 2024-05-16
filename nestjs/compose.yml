@@ -5,6 +5,21 @@ volumes:
   super-vol: {}
 
 services:
+  hello:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ['pnpm', 'run', 'dev']
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - super-net
+    ports: !override
+      - 3000:${PORT}/tcp
+    volumes:
+      - .:/hello
+
   database:
     image: mysql:8.0
     healthcheck:

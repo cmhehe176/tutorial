@@ -22,7 +22,7 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
 
-    //asynchronous
+    //asynchronous => dùng hashSync hoặc có thể dùng await ở đây cũng được
     const salt = bcrypt.genSaltSync(+this.config.get('SALT'));
     const hashPassword = bcrypt.hashSync(data.password, salt);
     //or
