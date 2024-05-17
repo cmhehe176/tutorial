@@ -13,6 +13,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   async validate(email: string, password: string): Promise<AdminEntity> {
     const user = await this.authService.verify(email, password);
 
+    // có thể viết trong hàm verify luôn cũng được , hoặc là viết ở đây cũng được 
+
     if (!user) {
       throw new UnauthorizedException();
     }

@@ -15,7 +15,7 @@ export class AuthService {
     private admin_db: Repository<AdminEntity>,
     private config: ConfigService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   register = async (data: Register) => {
     const user = await this.admin_db.findOneBy({ email: data.email });
@@ -55,7 +55,7 @@ export class AuthService {
   };
 
   compare = (password, hashpassword) => {
-    return bcrypt.compare(password, hashpassword);
+    return bcrypt.compareSync(password, hashpassword);
   };
 
   accessToken = (payload) => {
