@@ -15,10 +15,11 @@ export class AuthService {
     private admin_db: Repository<AdminEntity>,
     private config: ConfigService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   register = async (data: Register) => {
     const user = await this.admin_db.findOneBy({ email: data.email });
+
     if (user)
       throw new HttpException(
         { message: 'User is exist ' },
