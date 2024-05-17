@@ -14,8 +14,8 @@ export class AuthService {
     @InjectRepository(AdminEntity)
     private admin_db: Repository<AdminEntity>,
     private config: ConfigService,
-    private jwtService: JwtService
-  ) { }
+    private jwtService: JwtService,
+  ) {}
 
   register = async (data: Register) => {
     const user = await this.admin_db.findOneBy({ email: data.email });
@@ -33,16 +33,16 @@ export class AuthService {
   };
 
   login = async (data: Login) => {
-    const user = await this.verify(data.email, data.password)
+    const user = await this.verify(data.email, data.password);
 
     const payload = {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role
-    }
+      role: user.role,
+    };
 
-    return this.accessToken(payload)
+    return this.accessToken(payload);
   };
 
   hash = (password) => {
@@ -51,20 +51,20 @@ export class AuthService {
     const hashPassword = bcrypt.hashSync(password, salt);
     //or
     //const hashPassword = bcrypt.hash(data.password,10) => fast
-    return hashPassword
-  }
+    return hashPassword;
+  };
 
   compare = (password, hashpassword) => {
-    return bcrypt.compare(password, hashpassword)
-  }
+    return bcrypt.compare(password, hashpassword);
+  };
 
   accessToken = (payload) => {
-    return { Token: this.jwtService.sign(payload) }
-  }
+    return { Token: this.jwtService.sign(payload) };
+  };
 
   verify = async (email, password) => {
     const user = await this.admin_db.findOneBy({ email });
-  
+
     if (!user)
       throw new HttpException(
         { message: USER_NOT_FOUND },
@@ -76,7 +76,7 @@ export class AuthService {
         { message: USER_NOT_FOUND },
         HttpStatus.UNAUTHORIZED,
       );
-    
-    return user
-  }
+
+    return user;
+  };
 }

@@ -15,12 +15,13 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       useFactory: async (config: ConfigService) => ({
         secret: config.get<string>('JWT_SECRET_KEY'),
         signOptions: {
-          expiresIn: config.get<any>('TIME_EXPIRED_TOKEN')
-        }
+          expiresIn: config.get<string>('TIME_EXPIRED_JWT_TOKEN'),
+        },
       }),
-      inject:[ConfigService]
-    })],
+      inject: [ConfigService],
+    }),
+  ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy,JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}

@@ -9,7 +9,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {
     super({ usernameField: 'email' });
   }
-//validate lần đầu khi mà người dùng gửi request đăng nhập 
+  //validate lần đầu khi mà người dùng gửi request đăng nhập
   async validate(email: string, password: string): Promise<AdminEntity> {
     const user = await this.authService.verify(email, password);
 

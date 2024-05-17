@@ -1,14 +1,13 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'role' })
-export class RoleEntity{
-	
-	@PrimaryGeneratedColumn()
-	id:number
+export class RoleEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-	@Column({ name: 'name', type: 'varchar' })
-	name: string
-	
-	@Column({ unique: true })
-	alias: string;
+  @Column({ name: 'name', type: 'varchar' })
+  name: string;
+
+  @Column({ unique: true })
+  alias: string;
 }

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as entities from './entities';
 
 // nên chia ra làm một module riêng để clear code hơn là so với nhét thằng typeorm trực tiếp vào app module
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -25,12 +25,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         username: configService.get('database.username'),
         password: configService.get('database.password'),
         database: configService.get('database.database'),
-        entities: [],
+        entities: Object.values(entities),
         synchronize: false,
-        autoLoadEntities: true,
+        autoLoadEntities: false, // đặt là true thì sẽ bị lỗi metadata, đặt là true thì nó sẽ tự động tìm entity rồi match vào entity ,nhma lắm lỗi
         migrations: ['dist/database/migrations/*.js'],
-				//migrationsRun: configService.get('NODE_ENV') !== 'development',
-				//auto run migration , if exist coloumn in db => error 
+        //migrationsRun: configService.get('NODE_ENV') !== 'development',
+        //auto run migration , if exist coloumn in db => error
 
         //ở đây khi đặt là true thì sẽ tự động thay đổi data mỗi khi có sự thay đổi đầu vào
         //tại sao chỗ khác ngta hay đặt là false nhỉ ???? trong dự án thực tế con Oni ý
