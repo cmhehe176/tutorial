@@ -11,4 +11,7 @@ export class AdminEntity extends BaseEntity {
 
   @Column({ name: 'password', type: 'varchar' })
   password: string;
+
+  @Column({ name: 'role', type: 'varchar' })
+  role: string
 }

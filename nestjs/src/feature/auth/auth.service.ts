@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { USER_NOT_FOUND } from 'src/common/error';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,7 @@ export class AuthService {
     @InjectRepository(AdminEntity)
     private admin_db: Repository<AdminEntity>,
     private config: ConfigService,
+    private jwtService: JwtService
   ) {}
   register = async (data: Register) => {
     const user = await this.admin_db.findOneBy({ email: data.email });
@@ -22,13 +24,7 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
 
-    //asynchronous => dùng hashSync hoặc có thể dùng await ở đây cũng được
-    const salt = bcrypt.genSaltSync(+this.config.get('SALT'));
-    const hashPassword = bcrypt.hashSync(data.password, salt);
-    //or
-    //const hashPassword = bcrypt.hash(data.password,10) => fast
-
-    data.password = hashPassword;
+    data.password = this.hash(data.password);
     await this.admin_db.insert(data);
 
     delete data.password;
@@ -43,13 +39,34 @@ export class AuthService {
         HttpStatus.UNAUTHORIZED,
       );
 
-    const verify = bcrypt.compareSync(data.password, user.password);
-    if (!verify)
+    if (!this.compare(data.password,user.password))
       throw new HttpException(
         { message: USER_NOT_FOUND },
         HttpStatus.UNAUTHORIZED,
       );
+    
+    const payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email
+    }
 
-    return 'hehe';
+    return {
+      accesToken: this.jwtService.sign(payload),
+      refreshToken: this.jwtService.sign(payload)
+    }
   };
+
+  hash = (password) => {
+    //asynchronous => dùng hashSync hoặc có thể dùng await ở đây cũng được
+    const salt = bcrypt.genSaltSync(+this.config.get('SALT'));
+    const hashPassword = bcrypt.hashSync(password, salt);
+    //or
+    //const hashPassword = bcrypt.hash(data.password,10) => fast
+    return hashPassword
+  }
+  
+  compare = (password, hashpassword) => {
+    return bcrypt.compareSync(password,hashpassword)
+  }
 }
