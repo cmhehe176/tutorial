@@ -1,5 +1,6 @@
 import { BaseEntity } from '../base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { RoleEntity } from './role.entity';
 
 @Entity({ name: 'admins' })
 export class AdminEntity extends BaseEntity {
@@ -12,6 +13,7 @@ export class AdminEntity extends BaseEntity {
   @Column({ name: 'password', type: 'varchar' })
   password: string;
 
-  @Column({ name: 'role', type: 'varchar' })
-  role: string
+  @ManyToOne('RoleEntity')
+  @JoinColumn({ name: 'role_id' })
+  role?: RoleEntity;
 }

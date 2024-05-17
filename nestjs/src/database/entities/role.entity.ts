@@ -6,6 +6,9 @@ export class RoleEntity{
 	@PrimaryGeneratedColumn()
 	id:number
 
-	@Column({ name: 'role', type: 'varchar' })
-	name:string
+	@Column({ name: 'name', type: 'varchar' })
+	name: string
+	
+	@Column({ unique: true })
+	alias: string;
 }
