@@ -15,7 +15,8 @@ export class AuthService {
     private admin_db: Repository<AdminEntity>,
     private config: ConfigService,
     private jwtService: JwtService
-  ) {}
+  ) { }
+  
   register = async (data: Register) => {
     const user = await this.admin_db.findOneBy({ email: data.email });
     if (user)
@@ -51,10 +52,7 @@ export class AuthService {
       email: user.email
     }
 
-    return {
-      accesToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload)
-    }
+    return this.accessToken(payload)
   };
 
   hash = (password) => {
@@ -67,6 +65,10 @@ export class AuthService {
   }
   
   compare = (password, hashpassword) => {
-    return bcrypt.compareSync(password,hashpassword)
+    return bcrypt.compare(password,hashpassword)
+  }
+
+  accessToken = (payload) => {
+    return {  Token: this.jwtService.sign(payload)  }
   }
 }

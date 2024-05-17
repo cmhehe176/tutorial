@@ -10,8 +10,11 @@ import { ConfigService } from '@nestjs/config';
   imports: [
     TypeOrmModule.forFeature([AdminEntity]),
     JwtModule.registerAsync({
-      useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET_KEY')
+      useFactory: async (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET_KEY'),
+        signOptions: {
+          expiresIn: config.get<any>('TIME_EXPIRED_TOKEN')
+        }
       }),
       inject:[ConfigService]
     })],

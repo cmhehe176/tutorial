@@ -29,7 +29,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         synchronize: false,
         autoLoadEntities: true,
         migrations: ['dist/database/migrations/*.js'],
-        migrationsRun: configService.get('NODE_ENV') !== 'development',
+				//migrationsRun: configService.get('NODE_ENV') !== 'development',
+				//auto run migration , if exist coloumn in db => error 
 
         //ở đây khi đặt là true thì sẽ tự động thay đổi data mỗi khi có sự thay đổi đầu vào
         //tại sao chỗ khác ngta hay đặt là false nhỉ ???? trong dự án thực tế con Oni ý
