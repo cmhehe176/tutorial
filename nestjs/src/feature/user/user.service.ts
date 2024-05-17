@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from './user.entity';
+import { UserEntity } from '../../database/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './ user.dto';
 
@@ -10,10 +10,9 @@ export class UserService {
     @InjectRepository(UserEntity)
     private userEntity: Repository<UserEntity>,
     private dataSource: DataSource,
-  ) {}
+  ) { }
 
   // insert không trả về giá trị
-
   async create(body: CreateUserDto) {
     // const user = {...body}  dùng như này thì nó sẽ không lấy được trường id
     const user = body;
@@ -25,3 +24,4 @@ export class UserService {
     return this.userEntity.findOneBy({ id });
   };
 }
+
