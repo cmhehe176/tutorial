@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../../database/entities/user.entity';
+import { UserEntity } from 'src/database/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './ user.dto';
 
@@ -10,7 +10,7 @@ export class UserService {
     @InjectRepository(UserEntity)
     private userEntity: Repository<UserEntity>,
     private dataSource: DataSource,
-  ) { }
+  ) {}
 
   // insert không trả về giá trị
   async create(body: CreateUserDto) {
@@ -24,4 +24,3 @@ export class UserService {
     return this.userEntity.findOneBy({ id });
   };
 }
-
