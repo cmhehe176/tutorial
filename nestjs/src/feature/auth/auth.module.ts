@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminEntity } from 'src/database/entities/admin.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { ConfigService } from '@nestjs/config';
       inject:[ConfigService]
     })],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, LocalStrategy],
 })
 export class AuthModule {}

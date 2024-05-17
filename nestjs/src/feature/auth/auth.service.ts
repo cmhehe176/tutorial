@@ -16,7 +16,7 @@ export class AuthService {
     private config: ConfigService,
     private jwtService: JwtService
   ) { }
-  
+
   register = async (data: Register) => {
     const user = await this.admin_db.findOneBy({ email: data.email });
     if (user)
@@ -33,19 +33,8 @@ export class AuthService {
   };
 
   login = async (data: Login) => {
-    const user = await this.admin_db.findOneBy({ email: data.email });
-    if (!user)
-      throw new HttpException(
-        { message: USER_NOT_FOUND },
-        HttpStatus.UNAUTHORIZED,
-      );
+    const user = await this.verify(data.email, data.password)
 
-    if (!this.compare(data.password,user.password))
-      throw new HttpException(
-        { message: USER_NOT_FOUND },
-        HttpStatus.UNAUTHORIZED,
-      );
-    
     const payload = {
       id: user.id,
       name: user.name,
@@ -64,12 +53,30 @@ export class AuthService {
     //const hashPassword = bcrypt.hash(data.password,10) => fast
     return hashPassword
   }
-  
+
   compare = (password, hashpassword) => {
-    return bcrypt.compare(password,hashpassword)
+    return bcrypt.compare(password, hashpassword)
   }
 
   accessToken = (payload) => {
-    return {  Token: this.jwtService.sign(payload)  }
+    return { Token: this.jwtService.sign(payload) }
+  }
+
+  verify = async (email, password) => {
+    const user = await this.admin_db.findOneBy({ email });
+  
+    if (!user)
+      throw new HttpException(
+        { message: USER_NOT_FOUND },
+        HttpStatus.UNAUTHORIZED,
+      );
+
+    if (!this.compare(password, user.password))
+      throw new HttpException(
+        { message: USER_NOT_FOUND },
+        HttpStatus.UNAUTHORIZED,
+      );
+    
+    return user
   }
 }
