@@ -8,10 +8,9 @@ export default new DataSource({
   username: process.env.MYSQL_USERNAME,
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
-  entities: ['src/database/entities/*.entity.ts',],
+  entities: ['src/database/entities/*.entity.ts'],
   migrations: ['src/database/migrations/*.ts'],
 });
 
 // ở đây , phần entities là nó sẽ lây tất cả các file entities rồi nhét vào migrations để generate , khi generate xong nó sẽ tạo ra các file ở folder migrations ở trong data_source
 // rồi run thì nó mới tạo cho mình cái bảng ở trên db
-

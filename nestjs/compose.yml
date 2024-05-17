@@ -5,6 +5,7 @@ volumes:
   super-vol: {}
 
 services:
+
   database:
     image: mysql:8.0
     healthcheck:
