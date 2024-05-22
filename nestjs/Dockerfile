@@ -4,7 +4,7 @@ WORKDIR /hello
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN npm install pnpm 
+RUN npm install -g --force pnpm 
 
 RUN pnpm install
 
@@ -12,4 +12,4 @@ COPY . .
 
 COPY .env.example .env
 
-CMD [ "pnpm", "run", "dev", "--", "--host" ]
+CMD [ "pnpm","run", "dev", "--", "--host" ]
