@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Login, Register } from './auth.dto';
 import { Public } from 'src/common/decorators/public.decorator';
@@ -10,12 +10,12 @@ export class AuthController {
   @Public()
   @Post('register')
   register(@Body() body: Register) {
-    return this.authService.register(body);
+    return this.authService.registerUser(body);
   }
 
   @Public()
-  @Post()
-  login(@Body() body: Login) {
-    return this.authService.login(body);
+  @Post('login/:roleId')
+  login(@Param('roleId', ParseIntPipe) roleId: number, @Body() body: Login) {
+    return this.authService.login(roleId, body);
   }
 }

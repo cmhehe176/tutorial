@@ -1,19 +1,24 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { BaseEntity } from '../base.entity';
+import { RoleEntity } from './role.entity';
+import { AdminEntity } from './admin.entity';
 
 @Entity({ name: 'users' })
-export class UserEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
+export class UserEntity extends BaseEntity {
+  @Column({ name: 'name', type: 'varchar' })
   name: string;
 
-  @Column()
+  @Column({ name: 'email', type: 'varchar' })
   email: string;
 
-  @Column()
+  @Column({ name: 'password', type: 'varchar' })
   password: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @ManyToOne('RoleEntity')
+  @JoinColumn({ name: 'role_id' })
+  role?: RoleEntity;
+
+  @ManyToOne('AdminEntity')
+  @JoinColumn({ name: 'admin_id' })
+  admin_id: AdminEntity;
 }

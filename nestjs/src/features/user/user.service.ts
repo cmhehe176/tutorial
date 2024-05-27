@@ -20,7 +20,7 @@ export class UserService {
     return user;
   }
 
-  get = async (id: number) => {
-    return this.userEntity.findOneBy({ id });
+  getUserbyEmail = async (email: string) => {
+    return await this.userEntity.findOneBy({ email });
   };
 }
