@@ -34,6 +34,10 @@ export class AuthService {
   };
 
   login = async (data: Login) => {
+    
+    //hàm verify kia trả về thông tin user, trong đó sẽ có cả role nữa 
+    //sau đó role sẽ được ném vào bên trong payload , khi đó khi verify thêm lần nữa cho payload thì nó sẽ lấy role từ payload
+
     const user = await this.verify(data.email, data.password);
 
     const payload = {
