@@ -1,6 +1,6 @@
 FROM node:20.13.1
 
-WORKDIR /hello
+WORKDIR /super
 
 COPY package.json pnpm-lock.yaml ./
 

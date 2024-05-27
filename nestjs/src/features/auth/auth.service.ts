@@ -1,23 +1,26 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Login, Register } from './auth.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { AdminEntity } from 'src/database/entities/admin.entity';
-import { Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { USER_NOT_FOUND } from 'src/common/error';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { RoleEntity } from 'src/database/entities';
+import { ERole } from 'src/common/constants/auth.constant';
+import { AdminService } from '../admin/admin.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(AdminEntity)
-    private admin_db: Repository<AdminEntity>,
+    private dataSource: DataSource,
     private config: ConfigService,
     private jwtService: JwtService,
+    private adminService: AdminService,
+    private userService: UserService,
   ) {}
 
-  register = async (data: Register) => {
+  registerUser = async (data: Register) => {
     const user = await this.admin_db.findOneBy({ email: data.email });
 
     if (user)
@@ -33,12 +36,10 @@ export class AuthService {
     return data;
   };
 
-  login = async (data: Login) => {
-    
-    //hàm verify kia trả về thông tin user, trong đó sẽ có cả role nữa 
+  login = async (roleId: number, data: Login) => {
+    //hàm verify kia trả về thông tin user, trong đó sẽ có cả role nữa
     //sau đó role sẽ được ném vào bên trong payload , khi đó khi verify thêm lần nữa cho payload thì nó sẽ lấy role từ payload
-
-    const user = await this.verify(data.email, data.password);
+    const user = await this.verify(roleId, data.email, data.password);
 
     const payload = {
       id: user.id,
@@ -67,8 +68,17 @@ export class AuthService {
     return { Token: this.jwtService.sign(payload) };
   };
 
-  verify = async (email, password) => {
-    const user = await this.admin_db.findOneBy({ email });
+  verify = async (roleId, email, password) => {
+    const role = await this.dataSource
+      .getRepository(RoleEntity)
+      .findOneById(roleId);
+    let user;
+
+    if (role.name === ERole.ADMIN) {
+      user = await this.adminService.getAdminbyEmail(email);
+    } else if (role.name === ERole.USER) {
+      user = await this.userService.getUserbyEmail(email);
+    }
 
     if (!user)
       throw new HttpException(
