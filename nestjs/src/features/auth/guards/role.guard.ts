@@ -18,7 +18,8 @@ export class RoleGuard implements CanActivate {
     }
 
     const { user } = context.switchToHttp().getRequest();
-
+    //ở đây đơn giản là check ở jwt được verify trong đó có trường role , nếu match thì sẽ accept route đi qua 
+    //like this   @Roles(ERole.ADMIN, ERole.SUPER_ADMIN) , đây là các role được accept đi qua route , nếu muốn thì thêm một trường nữa trong enum và 
     return requiredRoles.some((role) => user.role?.alias === role);
   }
 }
