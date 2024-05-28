@@ -6,20 +6,20 @@ volumes:
 
 services:
   
-  # super:
-  #   build: 
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   command: ['pnpm', 'run', 'dev']
-  #   depends_on:
-  #     database:
-  #       condition: service_healthy
-  #   networks:
-  #     - super-net
-  #   ports:
-  #     - 3000:${PORT}/tcp
-  #   volumes:
-  #     - .:/super
+  super:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: ['pnpm', 'run', 'dev']
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - super-net
+    ports:
+      - 3000:${PORT}/tcp
+    volumes:
+      - .:/super
   
   database:
     image: mysql:8.0
@@ -41,7 +41,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     restart: unless-stopped
     ports:
-      - 3306:3306
+      - 3306:${MYSQL_PORT}
     networks:
       - super-net
     volumes:
