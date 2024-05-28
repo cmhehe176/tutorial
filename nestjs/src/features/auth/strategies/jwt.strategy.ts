@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: AuthPayload) {
     const user = await this.dataSource.manager.findOne(AdminEntity, {
       where: { id: +payload.id },
-      relations: { role: true },
+      relations: { roleId: true },
     });
 
     if (!user) {
@@ -34,7 +34,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role: user.roleId,
     };
   }
 }

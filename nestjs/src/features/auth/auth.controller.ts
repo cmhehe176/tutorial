@@ -2,15 +2,15 @@ import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Login, RegisterAdmin, RegisterUser } from './auth.dto';
 import { Public } from 'src/common/decorators/public.decorator';
+import { ERole, Roles } from 'src/common/decorators/role.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Public()
+  @Roles(ERole.ADMIN,ERole.SUPER_ADMIN)
   @Post('/register/admin')
   registerAdmin(@Body() body: RegisterAdmin) {
-    console.log('asjfasdf')
     return this.authService.registerAdmin(body);
   }
 
