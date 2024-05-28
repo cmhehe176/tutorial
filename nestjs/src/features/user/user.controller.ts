@@ -18,8 +18,4 @@ export class UserController {
     return this.userService.create(body);
   }
 
-  @Get(':id')
-  get(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.get(id);
-  }
 }

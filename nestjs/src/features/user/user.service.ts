@@ -10,7 +10,6 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private user_db: Repository<UserEntity>,
-    private dataSource: DataSource,
   ) {}
 
   // insert không trả về giá trị
