@@ -16,6 +16,6 @@ export class AdminService {
   };
 
   createAdmin = async (data: RegisterAdmin) => {
-    return await this.admin_db.insert(data)
-  }
+    return await this.admin_db.insert(data);
+  };
 }

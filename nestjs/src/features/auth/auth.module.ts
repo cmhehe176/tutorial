@@ -7,9 +7,12 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AdminModule } from '../admin/admin.module';
 import { UserModule } from '../user/user.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { RoleEntity } from 'src/database/entities';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([RoleEntity]),
     JwtModule.registerAsync({
       useFactory: async (config: ConfigService) => ({
         secret: config.get<string>('JWT_SECRET_KEY'),
@@ -20,7 +23,7 @@ import { UserModule } from '../user/user.module';
       inject: [ConfigService],
     }),
     AdminModule,
-    UserModule
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],

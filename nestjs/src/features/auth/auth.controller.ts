@@ -8,7 +8,7 @@ import { ERole, Roles } from 'src/common/decorators/role.decorator';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Roles(ERole.ADMIN,ERole.SUPER_ADMIN)
+  @Roles(ERole.ADMIN, ERole.SUPER_ADMIN)
   @Post('/register/admin')
   registerAdmin(@Body() body: RegisterAdmin) {
     return this.authService.registerAdmin(body);

@@ -15,7 +15,7 @@ export class RoleEntity {
 
   @OneToMany(() => UserEntity, (user) => user.roleId)
   userId?: UserEntity[];
-  
+
   @OneToMany(() => AdminEntity, (admin) => admin.roleId)
   adminId?: AdminEntity[];
 }

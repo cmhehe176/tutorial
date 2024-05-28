@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Login, RegisterAdmin, RegisterUser } from './auth.dto';
-import { DataSource } from 'typeorm';
+import { Repository } from 'typeorm';
 import { USER_NOT_FOUND } from 'src/common/error';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
@@ -9,11 +9,13 @@ import { RoleEntity } from 'src/database/entities';
 import { ERole } from 'src/common/constants/auth.constant';
 import { AdminService } from '../admin/admin.service';
 import { UserService } from '../user/user.service';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private dataSource: DataSource,
+    @InjectRepository(RoleEntity)
+    private role_db: Repository<RoleEntity>,
     private config: ConfigService,
     private jwtService: JwtService,
     private adminService: AdminService,
@@ -21,7 +23,7 @@ export class AuthService {
   ) {}
 
   registerAdmin = async (data: RegisterAdmin) => {
-    const admin = await this.adminService.getAdminbyEmail( data.email );
+    const admin = await this.adminService.getAdminbyEmail(data.email);
 
     if (admin)
       throw new HttpException(
@@ -85,9 +87,7 @@ export class AuthService {
   };
 
   verify = async (roleId, email, password) => {
-    const role = await this.dataSource
-      .getRepository(RoleEntity)
-      .findOneById(roleId);
+    const role = await this.role_db.findOneById(roleId);
     let user;
 
     if (role.name === ERole.ADMIN) {

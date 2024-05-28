@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/database/entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './ user.dto';
 import { RegisterUser } from '../auth/auth.dto';
 
@@ -25,6 +25,6 @@ export class UserService {
   };
 
   createUser = async (data: RegisterUser) => {
-    return await this.user_db.insert(data)
-  }
+    return await this.user_db.insert(data);
+  };
 }

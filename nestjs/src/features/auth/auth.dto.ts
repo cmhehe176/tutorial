@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsNumberString, IsOptional, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumberString,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { AdminEntity, RoleEntity } from 'src/database/entities';
 
 export class Login {
@@ -26,7 +31,7 @@ export class RegisterAdmin {
 
   @IsNumberString()
   @IsNotEmpty()
-  roleId: RoleEntity
+  roleId: RoleEntity;
 }
 
 export class RegisterUser {
@@ -44,9 +49,9 @@ export class RegisterUser {
 
   @IsNumberString()
   @IsNotEmpty()
-  roleId: RoleEntity
+  roleId: RoleEntity;
 
   @IsNumberString()
   @IsOptional()
-  adminId?: AdminEntity
+  adminId?: AdminEntity;
 }
