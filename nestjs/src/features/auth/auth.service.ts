@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Login, Register } from './auth.dto';
+import { Login, RegisterAdmin, RegisterUser } from './auth.dto';
 import { DataSource } from 'typeorm';
 import { USER_NOT_FOUND } from 'src/common/error';
 import * as bcrypt from 'bcrypt';
@@ -20,17 +20,33 @@ export class AuthService {
     private userService: UserService,
   ) {}
 
-  registerUser = async (data: Register) => {
-    const user = await this.admin_db.findOneBy({ email: data.email });
+  registerAdmin = async (data: RegisterAdmin) => {
+    const admin = await this.adminService.getAdminbyEmail( data.email );
 
-    if (user)
+    if (admin)
       throw new HttpException(
-        { message: 'User is exist ' },
+        { message: 'Account is exist ' },
         HttpStatus.BAD_REQUEST,
       );
 
     data.password = this.hash(data.password);
-    await this.admin_db.insert(data);
+    await this.adminService.createAdmin(data);
+
+    delete data.password;
+    return data;
+  };
+
+  registerUser = async (data: RegisterUser) => {
+    const admin = await this.userService.getUserbyEmail(data.email);
+
+    if (admin)
+      throw new HttpException(
+        { message: 'Account is exist ' },
+        HttpStatus.BAD_REQUEST,
+      );
+
+    data.password = this.hash(data.password);
+    await this.userService.createUser(data);
 
     delete data.password;
     return data;

@@ -10,7 +10,21 @@ export class Login {
   password: string;
 }
 
-export class Register {
+export class RegisterAdmin {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
+
+export class RegisterUser {
   @IsString()
   @IsNotEmpty()
   name: string;
