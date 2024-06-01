@@ -11,7 +11,7 @@ export abstract class BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @CreateDateColumn({ name: 'create_at' })
+  @CreateDateColumn({ name: 'create_at', type:'timestamp' })
   createAt: Date;
 
   @UpdateDateColumn({ name: 'update_at' })

@@ -11,6 +11,8 @@ import dbConfig from './config/db.config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './features/auth/guards/jwt-auth.guard';
 import { RoleGuard } from './features/auth/guards/role.guard';
+import { TimeModule } from './features/time/time.module';
+import { SubjectModule } from './features/subject/subject.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { RoleGuard } from './features/auth/guards/role.guard';
     ClassModule,
     AuthModule,
     AdminModule,
+    TimeModule,
+    SubjectModule,
   ],
   controllers: [AppController],
   providers: [
