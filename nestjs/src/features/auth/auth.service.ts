@@ -85,12 +85,12 @@ export class AuthService {
   //   return bcrypt.compareSync(password, hashpassword);
   // };
 
-  hash = (password) => {
+  hash = (password: string) => {
    return argon.hash(password)
   }
 
-  compare = (password, hashedPassword) => {
-    return argon.verify(password,hashedPassword)
+  compare = (hashedPassword: string, password: string) => {
+    return argon.verify(hashedPassword, password)
   }
 
   generateToken = (payload) => {
@@ -113,7 +113,9 @@ export class AuthService {
         HttpStatus.UNAUTHORIZED,
       );
 
-    if (!this.compare(password, user.password))
+    const check = this.compare(user.password, password)
+    
+    if (!check)
       throw new HttpException(
         { message: USER_NOT_FOUND },
         HttpStatus.UNAUTHORIZED,

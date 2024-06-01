@@ -9,4 +9,9 @@ export class AdminController {
 	getUser(@Param('id', ParseIntPipe) id: number) {
 		return this.adminService.deleteUser(id)
 	}
+
+	@Get('list')
+	getListUser() {
+		return this.adminService.getListUser()
+	}
 }
