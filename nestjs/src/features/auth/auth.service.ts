@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Login, RegisterAdmin, RegisterUser } from './auth.dto';
 import { Repository } from 'typeorm';
 import { USER_NOT_FOUND } from 'src/common/error';
-import * as bcrypt from 'bcrypt';
+// import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { RoleEntity } from 'src/database/entities';
@@ -10,6 +10,7 @@ import { ERole } from 'src/common/constants/auth.constant';
 import { AdminService } from '../admin/admin.service';
 import { UserService } from '../user/user.service';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as argon from 'argon2'
 
 @Injectable()
 export class AuthService {
@@ -31,7 +32,7 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
 
-    data.password = this.hash(data.password);
+    data.password = await this.hash(data.password);
     await this.adminService.createAdmin(data);
 
     delete data.password;
@@ -47,7 +48,7 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
 
-    data.password = this.hash(data.password);
+    data.password = await this.hash(data.password);
     await this.userService.createUser(data);
 
     delete data.password;
@@ -68,19 +69,29 @@ export class AuthService {
 
     return this.generateToken(payload);
   };
+  // dùng bcrypt thì bị lỗi :))???
+
+  // hash = (password) => {
+  //   //asynchronous => dùng hashSync hoặc có thể dùng await ở đây cũng được
+  //   const salt = bcrypt.genSaltSync(+this.config.get('SALT'));
+  //   const hashPassword = bcrypt.hashSync(password, salt);
+    
+  //   //or
+  //   //const hashPassword = bcrypt.hash(data.password,10) => fast
+  //   return hashPassword;
+  // };
+
+  // compare = (password, hashpassword) => {
+  //   return bcrypt.compareSync(password, hashpassword);
+  // };
 
   hash = (password) => {
-    //asynchronous => dùng hashSync hoặc có thể dùng await ở đây cũng được
-    const salt = bcrypt.genSaltSync(+this.config.get('SALT'));
-    const hashPassword = bcrypt.hashSync(password, salt);
-    //or
-    //const hashPassword = bcrypt.hash(data.password,10) => fast
-    return hashPassword;
-  };
+   return argon.hash(password)
+  }
 
-  compare = (password, hashpassword) => {
-    return bcrypt.compareSync(password, hashpassword);
-  };
+  compare = (password, hashedPassword) => {
+    return argon.verify(password,hashedPassword)
+  }
 
   generateToken = (payload) => {
     return {  accessToken: this.jwtService.sign(payload)  }
