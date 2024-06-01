@@ -39,9 +39,9 @@ export class AuthService {
   };
 
   registerUser = async (data: RegisterUser) => {
-    const admin = await this.userService.getUserbyEmail(data.email);
+    const user = await this.userService.getUserbyEmail(data.email);
 
-    if (admin)
+    if (user)
       throw new HttpException(
         { message: 'Account is exist ' },
         HttpStatus.BAD_REQUEST,

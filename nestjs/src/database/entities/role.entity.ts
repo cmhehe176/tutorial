@@ -10,8 +10,8 @@ export class RoleEntity {
   @Column({ name: 'name', type: 'varchar' })
   name: string;
 
-  @Column({ unique: true })
-  alias: string;
+  // @Column({ unique: true })
+  // alias: string;
 
   @OneToMany(() => UserEntity, (user) => user.roleId)
   userId?: UserEntity[];
