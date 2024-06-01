@@ -28,6 +28,7 @@ import * as entities from './entities';
         entities: Object.values(entities),
         synchronize: false,
         autoLoadEntities: false, // đặt là true thì sẽ bị lỗi metadata, đặt là true thì nó sẽ tự động tìm entity rồi match vào entity ,nhma lắm lỗi
+        // => phải add thủ công như này đây , mệt vcl 
         migrations: ['dist/database/migrations/*.js'],
         //migrationsRun: configService.get('NODE_ENV') !== 'development',
         //auto run migration , if exist coloumn in db => error

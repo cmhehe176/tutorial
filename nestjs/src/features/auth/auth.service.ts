@@ -55,7 +55,7 @@ export class AuthService {
   };
 
   login = async (roleId: number, data: Login) => {
-    //hàm verify kia trả về thông tin user, trong đó sẽ có cả role nữa
+    //hàm verify return => user, trong đó sẽ có cả role nữa
     //sau đó role sẽ được ném vào bên trong payload , khi đó khi verify thêm lần nữa cho payload thì nó sẽ lấy role từ payload
     const user = await this.verify(roleId, data.email, data.password);
 
@@ -66,7 +66,7 @@ export class AuthService {
       role: user.role,
     };
 
-    return this.accessToken(payload);
+    return this.generateToken(payload);
   };
 
   hash = (password) => {
@@ -82,8 +82,8 @@ export class AuthService {
     return bcrypt.compareSync(password, hashpassword);
   };
 
-  accessToken = (payload) => {
-    return { Token: this.jwtService.sign(payload) };
+  generateToken = (payload) => {
+    return {  accessToken: this.jwtService.sign(payload)  }
   };
 
   verify = async (roleId, email, password) => {
