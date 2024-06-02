@@ -35,7 +35,7 @@ import * as entities from './entities';
 
         //ở đây khi đặt là true thì sẽ tự động thay đổi data mỗi khi có sự thay đổi đầu vào
         //tại sao chỗ khác ngta hay đặt là false nhỉ ???? trong dự án thực tế con Oni ý
-        timezone: '-07:00' // idonkhowww ???????????????
+        timezone: '-07:00' // idontknowww ???????????????
       }),
     }),
   ],
