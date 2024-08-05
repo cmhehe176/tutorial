@@ -1,25 +1,25 @@
 networks:
-  super-net: {}
+  dklh-net: {}
 
 volumes:
-  super-vol: {}
+  dklh-vol: {}
 
 services:
   
-  super:
+  dklh:
     build: 
       context: .
       dockerfile: Dockerfile
-    command: ['pnpm', 'run', 'dev']
+    command: ['yarn', 'dev']
     depends_on:
       database:
         condition: service_healthy
     networks:
-      - super-net
+      - dklh-net
     ports:
       - 3000:${PORT}/tcp
     volumes:
-      - .:/super
+      - .:/dklh
   
   database:
     image: mysql:8.0
@@ -38,14 +38,15 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_USERNAME=${MYSQL_USERNAME}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     restart: unless-stopped
     ports:
       - 3306:${MYSQL_PORT}
     networks:
-      - super-net
+      - dklh-net
     volumes:
-      - super-vol:/var/lib/mysql
+      - dklh-vol:/var/lib/mysql
 
   adminer:
     image: adminer
@@ -60,6 +61,6 @@ services:
       - ADMINER_PLUGINS=dump-json dump-zip edit-foreign json-column tables-filter tinymce
     restart: always
     networks:
-      - super-net
+      - dklh-net
     ports:
       - 8080:8080/tcp

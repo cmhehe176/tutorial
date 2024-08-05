@@ -1,15 +1,15 @@
-FROM node:20.13.1
+FROM node:20.14.0
 
-WORKDIR /super
+WORKDIR /dklh
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json yarn.lock ./
 
-RUN npm install -g --force pnpm 
+RUN npm install -g --force yarn 
 
-RUN pnpm install
+RUN yarn
 
 COPY . .
 
 COPY .env.example .env
 
-CMD [ "pnpm","run", "dev", "--", "--host" ]
+CMD [ "yarn", "dev", "--", "--host" ]

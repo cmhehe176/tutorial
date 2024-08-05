@@ -2,9 +2,22 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
-import { AuthPayload } from '../interfaces/auth.interface';
+// import { AuthPayload } from '../interfaces/auth.interface';
 import { DataSource } from 'typeorm';
-import { AdminEntity } from 'src/database/entities/admin.entity';
+import { UserEntity } from 'src/database/entities';
+
+interface AuthPayload {
+  id: number | string;
+  name: string;
+  address: string;
+  telephone: number | string;
+  email: string;
+  role: {
+    id: number;
+    name: string;
+    alias: string;
+  };
+}
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -14,16 +27,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false, //kiểm tra hết hạn của token
+      ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_SECRET_KEY'),
     });
   }
-  //validate lần thứ 2 khi lúc này nó bắt bên fe phải đưa cho nó cái token , và nó phải validate cái token để mà tiếp tục đăng nhập vào tiếp
-  // => nhả ra thông tin của user đăng nhập vào
+
   async validate(payload: AuthPayload) {
-    const user = await this.dataSource.manager.findOne(AdminEntity, {
-      where: { id: +payload.id },
-      relations: { roleId: true },
+    const user = await this.dataSource.manager.findOne(UserEntity, {
+      where: { email: payload.email },
+      relations: { role: true },
     });
 
     if (!user) {
@@ -34,7 +46,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.roleId,
+      telephone: user.telephone,
+      role: user.role,
     };
   }
 }

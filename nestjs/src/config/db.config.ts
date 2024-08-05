@@ -3,7 +3,7 @@ import { registerAs } from '@nestjs/config';
 export default registerAs('database', () => {
   const config = {
     host: process.env.MYSQL_HOST,
-    port: +process.env.MYSQL_PORT || 3306,
+    port: process.env.MYSQL_PORT || 3306,
     database: process.env.MYSQL_DATABASE,
     username: process.env.MYSQL_USERNAME,
     password: process.env.MYSQL_PASSWORD,
@@ -14,12 +14,15 @@ export default registerAs('database', () => {
   }
 
   try {
-    const credentials = JSON.parse(process.env.MYSQL_CREDENTIALS);
-
+    // const credentials = JSON.parse(process.env.MYSQL_CREDENTIALS);
+    
+    //something validate
     return {
       ...config,
-      username: credentials.username || config.username,
-      password: credentials.password || config.password,
+      // username: credentials.username || config.username,
+      // password: credentials.password || config.password,
+
+      //something validate
     };
   } catch (error) {
     return { ...config };

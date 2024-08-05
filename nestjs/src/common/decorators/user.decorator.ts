@@ -10,6 +10,8 @@ export const User = createParamDecorator(
 export interface IUser {
   id: number;
   name: string;
+  address: string;
+  telephone: string;
   email: string;
   role: {
     id: number;
