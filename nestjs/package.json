@@ -1,8 +1,8 @@
 {
-  "name": "dklh-server",
+  "name": "tutorial",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "ndmc",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
