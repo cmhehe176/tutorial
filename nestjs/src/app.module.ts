@@ -8,6 +8,7 @@ import dbConfig from './config/db.config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './feature/auth/guards/auth.guard';
 import { RoleGuard } from './feature/auth/guards/role.guard';
+import { SendMailModule } from './feature/send-mail/send-mail.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RoleGuard } from './feature/auth/guards/role.guard';
       load: [dbConfig],
     }),
     AuthModule,
+    SendMailModule,
   ],
   controllers: [AppController],
   providers: [
