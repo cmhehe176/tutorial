@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './feature/auth/guards/auth.guard';
 import { RoleGuard } from './feature/auth/guards/role.guard';
 import { SendMailModule } from './feature/send-mail/send-mail.module';
+import { CloudStorageModule } from './feature/cloud-storage/cloud-storage.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { SendMailModule } from './feature/send-mail/send-mail.module';
     }),
     AuthModule,
     SendMailModule,
+    CloudStorageModule,
   ],
   controllers: [AppController],
   providers: [
