@@ -23,6 +23,7 @@
     "seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed -n src/database/seeder-config.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.651.1",
     "@aws-sdk/client-ses": "^3.645.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
